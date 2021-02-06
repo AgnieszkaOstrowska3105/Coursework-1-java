@@ -1,60 +1,61 @@
 public class Sentence {
-  private String word;
   
+  private String word;
   
   public Sentence(){
     word = new String();
   }
   
   
-  public void myDictionary() {
-    Dictionary dictionary = new Dictionary();
-  }
-  
-  
   public void readFile(){
-    myDictionary(); //created an object to which I can refer when checking the spelling
     FileInput input = new FileInput("sentence.txt");
     while(input.hasNextChar()){
       isLetter(input.nextChar());
     }
+    lastWord();
   }
   
-  
-  public void isLetter(char c){
+  private void isLetter(char c){
     if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')){
       concatWord((c));
     }
-    else if (c == ' '){
-      checkWord();
-      newWord();
+    //if whitespace encountered --> the word is finished,
+    // so I can check if it's in my dictionary and then assign to an empty string
+    else if (Character.isWhitespace(c)){
+      //if we have multiple consecutive whitespace characters they're ignored
+      if (!(word == "")) {
+        checkWord();
+        emptyWord();
+      }
     }
   }
   
   
-  public void concatWord(char c){
+  private void lastWord(){
+    if (!word.equals("")){
+      checkWord();
+    }
+  }
+  
+  
+  private void concatWord(char c){
     word += c;
   }
   
+  private void emptyWord() { word = ""; }
   
-  public void checkWord(){
-    if (!dictionary.contains(word)) writeToFile();
+  
+  private void checkWord(){
+    StringArray sa = Dictionary.readFile();
+    if (!sa.contains(word)) writeToFile();
   }
   
   
-  public void newWord(){
-    word = "";
-  }
-  
-  
-  public void writeToFile(){
-    FileOutput out = new FileOutput("reversed.txt");
+  private void writeToFile(){
+    FileOutput out = new FileOutput("incorrect_words.txt", true);
     out.writeString(word);
+    System.out.println("this is a word to be put in a file " + word);
     out.writeString(", ");
   }
   
-  
-  public void go(){
-    this.readFile();
-  }
 }

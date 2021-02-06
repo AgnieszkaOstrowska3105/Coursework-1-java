@@ -1,13 +1,6 @@
 public class Dictionary {
-  
-  private StringArray dictionary;
-  
-  public Dictionary(){
-    dictionary = readFile();
- }
  
- 
-  public StringArray readFile(){
+  public static StringArray readFile(){
     StringArray words = new StringArray();
     FileInput input = new FileInput("british-english");
     while (input.hasNextLine()) {
@@ -16,6 +9,7 @@ public class Dictionary {
     }
     return words;
   }
+  
   
   
   
